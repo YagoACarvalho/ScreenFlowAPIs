@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: midia-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: midiamanager
+      POSTGRES_USER: midia
+      POSTGRES_PASSWORD: midia123
+    ports:
+      - "5433:5432"
+    volumes:
+      - midia_pgdata:/var/lib/postgresql/data
+
+volumes:
+  midia_pgdata:
