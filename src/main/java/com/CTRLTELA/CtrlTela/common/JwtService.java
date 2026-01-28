@@ -18,19 +18,18 @@ public class JwtService {
     private final JwtProperties props;
 
     public JwtService(JwtProperties props) {
-        System.out.println("JWT minutes = " + props.accessTokenMinutes());
+
         this.props = props;
+        if (props.secretBase64() == null || props.secretBase64().isBlank()) {
+            throw new IllegalStateException("security.jwt.secret-base64 não configurado");
+        }
     }
 
     public String generatedAccessToken(String email, UUID tenantId, String role) {
         Instant now = Instant.now();
-        System.out.println("JWT minutes = " + props.accessTokenMinutes());
+
         Instant exp = now.plus(props.accessTokenMinutes(), ChronoUnit.MINUTES);
 
-        System.out.println("JWT now=" + now + " exp=" + exp);
-
-        System.out.println("JWT secret len=" + (props.secret() == null ? "null" : props.secret().length()));
-        System.out.println("JWT minutes=" + props.accessTokenMinutes());
 
         return Jwts.builder()
                 .subject(email)
@@ -44,7 +43,8 @@ public class JwtService {
 
     private SecretKey signingKey() {
 
-        return Keys.hmacShaKeyFor(props.secret().getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = java.util.Base64.getDecoder().decode(props.secretBase64());
+        return  io.jsonwebtoken.security.Keys.hmacShaKeyFor(keyBytes);
     }
 
     public JwtPrincipal parseAndValidate(String token) {
