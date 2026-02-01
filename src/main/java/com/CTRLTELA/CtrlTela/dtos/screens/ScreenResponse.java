@@ -1,4 +1,4 @@
-package com.CTRLTELA.CtrlTela.dtos;
+package com.CTRLTELA.CtrlTela.dtos.screens;
 
 import com.CTRLTELA.CtrlTela.domain.Screen;
 import com.CTRLTELA.CtrlTela.enums.ScreenStatus;

@@ -31,6 +31,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -52,5 +54,6 @@ public class SecurityConfig {
     public JwtAuthFilter jwtAuthFilter(JwtService jwtService, UserDetailsService uds) {
         return new JwtAuthFilter(jwtService, uds);
     }
+
 
 }

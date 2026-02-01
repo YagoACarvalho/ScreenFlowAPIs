@@ -1,9 +1,8 @@
 package com.CTRLTELA.CtrlTela.controllers;
 
 import com.CTRLTELA.CtrlTela.common.AuthContext;
-import com.CTRLTELA.CtrlTela.common.Exception.NotFoundException;
-import com.CTRLTELA.CtrlTela.dtos.ScreenCreateRequest;
-import com.CTRLTELA.CtrlTela.dtos.ScreenResponse;
+import com.CTRLTELA.CtrlTela.dtos.screens.ScreenCreateRequest;
+import com.CTRLTELA.CtrlTela.dtos.screens.ScreenResponse;
 import com.CTRLTELA.CtrlTela.services.ScreenService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

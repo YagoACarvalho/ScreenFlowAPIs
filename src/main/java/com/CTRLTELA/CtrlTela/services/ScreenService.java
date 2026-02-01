@@ -3,15 +3,14 @@ package com.CTRLTELA.CtrlTela.services;
 import com.CTRLTELA.CtrlTela.common.Exception.NotFoundException;
 import com.CTRLTELA.CtrlTela.domain.Screen;
 import com.CTRLTELA.CtrlTela.domain.Tenant;
-import com.CTRLTELA.CtrlTela.dtos.ScreenCreateRequest;
-import com.CTRLTELA.CtrlTela.dtos.ScreenResponse;
+import com.CTRLTELA.CtrlTela.dtos.screens.ScreenCreateRequest;
+import com.CTRLTELA.CtrlTela.dtos.screens.ScreenResponse;
 import com.CTRLTELA.CtrlTela.enums.ScreenStatus;
 import com.CTRLTELA.CtrlTela.repositories.ScreenRepository;
 import com.CTRLTELA.CtrlTela.repositories.TenantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

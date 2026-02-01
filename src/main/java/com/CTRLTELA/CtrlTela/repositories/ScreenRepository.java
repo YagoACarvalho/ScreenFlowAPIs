@@ -15,4 +15,6 @@ public interface ScreenRepository extends JpaRepository<Screen, UUID> {
 
     List<Screen> findAllByTenant_Id(UUID tenantId);
 
+    Optional<Screen> findByIdAndTenantId(UUID id, UUID tenantId);
+
 }

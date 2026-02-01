@@ -1,0 +1,19 @@
+-- garantir default de created_at
+-- protege caso algum insert futuro esqueça de preencher.
+ALTER TABLE activation_codes
+  ALTER COLUMN created_at SET DEFAULT now();
+
+-- evita gerar código já expirado por acidente
+ALTER TABLE activation_codes
+  ADD CONSTRAINT chk_activation_codes_expires_after_created
+  CHECK (expires_at > created_at);
+
+-- impedir MAIS DE UM código "ativo" (não usado) por tela
+-- evita confusão: um device tenta ativar e existem 3 códigos válidos.
+CREATE UNIQUE INDEX IF NOT EXISTS ux_activation_codes_one_active_per_screen
+  ON activation_codes(screen_id)
+  WHERE used_at IS NULL;
+
+-- índice pra limpeza/consulta por expiração
+CREATE INDEX IF NOT EXISTS idx_activation_codes_expires_at
+  ON activation_codes(expires_at);

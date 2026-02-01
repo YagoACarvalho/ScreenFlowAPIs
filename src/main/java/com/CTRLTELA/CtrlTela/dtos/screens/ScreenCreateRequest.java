@@ -1,7 +1,6 @@
-package com.CTRLTELA.CtrlTela.dtos;
+package com.CTRLTELA.CtrlTela.dtos.screens;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public record ScreenCreateRequest(
         @NotBlank
