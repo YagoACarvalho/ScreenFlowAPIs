@@ -55,6 +55,10 @@ public class Device {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "fingerprint", nullable = false, length = 64)
+    private String fingerprint;
+
+
     public void markSeen(LocalDateTime now) {
         this.lastSeenAt = now;
     }

@@ -2,11 +2,10 @@ package com.CTRLTELA.CtrlTela.controllers;
 
 import com.CTRLTELA.CtrlTela.common.AuthContext;
 import com.CTRLTELA.CtrlTela.dtos.activationCode.ActivationCodeCreateRequest;
-import com.CTRLTELA.CtrlTela.dtos.activationCode.ActivationCodeResponse;
+
 import com.CTRLTELA.CtrlTela.services.ActivationCodeService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

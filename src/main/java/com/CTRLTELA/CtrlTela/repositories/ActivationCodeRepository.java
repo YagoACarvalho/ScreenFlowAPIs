@@ -9,7 +9,7 @@ import java.util.UUID;
 import java.util.List;
 
 @Repository
-public interface ActivationCodeRepository extends JpaRepository<ActivationCode, UUID> {
+public interface ActivationCodeRepository extends JpaRepository<ActivationCode, String> {
     // checa a unicidade do code
     boolean existsByCode(String code);
 
