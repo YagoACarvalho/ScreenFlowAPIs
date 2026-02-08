@@ -1,4 +1,4 @@
-package com.CTRLTELA.CtrlTela.common;
+package com.CTRLTELA.CtrlTela.common.login;
 
 import org.springframework.stereotype.Service;
 

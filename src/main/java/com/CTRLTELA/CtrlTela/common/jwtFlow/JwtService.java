@@ -1,12 +1,10 @@
-package com.CTRLTELA.CtrlTela.common;
+package com.CTRLTELA.CtrlTela.common.jwtFlow;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -59,6 +57,22 @@ public class JwtService {
         String role = claims.get("role", String.class);
 
         return new JwtPrincipal(email, UUID.fromString(tenantIdStr), role);
+    }
+
+    public String generateDeviceAcessToken(UUID deviceId, UUID tenantId, UUID screenId) {
+        Instant now = Instant.now();
+        Instant exp = now.plus(props.accessTokenMinutes(), ChronoUnit.MINUTES);
+
+        return Jwts.builder()
+                .subject("device:" + deviceId)
+                .claim("tenantId", tenantId.toString())
+                .claim("deviceId",  deviceId.toString())
+                .claim("screenId", screenId.toString())
+                .claim("role", "DEVICE")
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(exp))
+                .signWith(signingKey())
+                .compact();
     }
 
 

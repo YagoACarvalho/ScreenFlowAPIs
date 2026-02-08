@@ -1,4 +1,4 @@
-package com.CTRLTELA.CtrlTela.common;
+package com.CTRLTELA.CtrlTela.common.login;
 
 import com.CTRLTELA.CtrlTela.domain.User;
 import com.CTRLTELA.CtrlTela.repositories.UserRepository;

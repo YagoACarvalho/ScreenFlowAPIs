@@ -1,6 +1,6 @@
 package com.CTRLTELA.CtrlTela;
 
-import com.CTRLTELA.CtrlTela.common.JwtProperties;
+import com.CTRLTELA.CtrlTela.common.jwtFlow.JwtProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

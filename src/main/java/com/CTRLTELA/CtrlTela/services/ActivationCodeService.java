@@ -1,9 +1,8 @@
 package com.CTRLTELA.CtrlTela.services;
 
-import com.CTRLTELA.CtrlTela.common.ActivationCodeGenerator;
-import com.CTRLTELA.CtrlTela.common.Exception.NotFoundException;
+import com.CTRLTELA.CtrlTela.common.login.ActivationCodeGenerator;
+import com.CTRLTELA.CtrlTela.common.exception.NotFoundException;
 import com.CTRLTELA.CtrlTela.domain.ActivationCode;
-import com.CTRLTELA.CtrlTela.domain.Tenant;
 import com.CTRLTELA.CtrlTela.dtos.activationCode.ActivationCodeCreateRequest;
 import com.CTRLTELA.CtrlTela.dtos.activationCode.ActivationCodeResponse;
 import com.CTRLTELA.CtrlTela.repositories.ActivationCodeRepository;

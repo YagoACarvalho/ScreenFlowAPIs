@@ -1,5 +1,6 @@
-package com.CTRLTELA.CtrlTela.common;
+package com.CTRLTELA.CtrlTela.common.login;
 
+import com.CTRLTELA.CtrlTela.common.jwtFlow.JwtService;
 import com.CTRLTELA.CtrlTela.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

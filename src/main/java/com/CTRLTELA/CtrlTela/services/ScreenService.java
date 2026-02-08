@@ -1,6 +1,6 @@
 package com.CTRLTELA.CtrlTela.services;
 
-import com.CTRLTELA.CtrlTela.common.Exception.NotFoundException;
+import com.CTRLTELA.CtrlTela.common.exception.NotFoundException;
 import com.CTRLTELA.CtrlTela.domain.Screen;
 import com.CTRLTELA.CtrlTela.domain.Tenant;
 import com.CTRLTELA.CtrlTela.dtos.screens.ScreenCreateRequest;

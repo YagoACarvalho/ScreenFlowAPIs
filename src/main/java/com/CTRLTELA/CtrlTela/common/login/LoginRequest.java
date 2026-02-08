@@ -1,4 +1,4 @@
-package com.CTRLTELA.CtrlTela.common;
+package com.CTRLTELA.CtrlTela.common.login;
 
 public record LoginRequest(
         String email,

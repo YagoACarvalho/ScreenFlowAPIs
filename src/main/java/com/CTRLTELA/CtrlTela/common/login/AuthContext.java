@@ -1,6 +1,6 @@
-package com.CTRLTELA.CtrlTela.common;
+package com.CTRLTELA.CtrlTela.common.login;
 
-import com.CTRLTELA.CtrlTela.common.Exception.UnauthorizedException;
+import com.CTRLTELA.CtrlTela.common.exception.UnauthorizedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.UUID;

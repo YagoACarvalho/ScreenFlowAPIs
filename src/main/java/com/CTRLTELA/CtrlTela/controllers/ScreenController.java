@@ -1,6 +1,6 @@
 package com.CTRLTELA.CtrlTela.controllers;
 
-import com.CTRLTELA.CtrlTela.common.AuthContext;
+import com.CTRLTELA.CtrlTela.common.login.AuthContext;
 import com.CTRLTELA.CtrlTela.dtos.screens.ScreenCreateRequest;
 import com.CTRLTELA.CtrlTela.dtos.screens.ScreenResponse;
 import com.CTRLTELA.CtrlTela.services.ScreenService;
