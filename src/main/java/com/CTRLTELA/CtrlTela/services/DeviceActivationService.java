@@ -1,6 +1,7 @@
 package com.CTRLTELA.CtrlTela.services;
 
 import com.CTRLTELA.CtrlTela.common.exception.NotFoundException;
+import com.CTRLTELA.CtrlTela.common.jwtFlow.TokenHash;
 import com.CTRLTELA.CtrlTela.domain.ActivationCode;
 import com.CTRLTELA.CtrlTela.domain.Device;
 import com.CTRLTELA.CtrlTela.dtos.DeviceActivation.DeviceActivateResponse;
@@ -63,6 +64,9 @@ public class DeviceActivationService {
         // Refresh token
         String refreshTokenRaw = UUID.randomUUID() + "." + UUID.randomUUID();
         device.setRefreshToken(refreshTokenRaw);
+
+        device.setRefreshToken(TokenHash.sha256Base64(refreshTokenRaw));
+
 
         Device saved = deviceRepository.save(device);
 

@@ -8,26 +8,37 @@ import java.util.UUID;
 public final class AuthContext {
     private AuthContext() {}
 
-    public static UUID tenantId() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if ( auth == null || !auth.isAuthenticated()) {
-            throw new UnauthorizedException("Not authenticated");
-        }
-        if (!(auth.getDetails() instanceof AuthDetails details)) {
-            throw new UnauthorizedException("Missing auth details");
+        private static AuthDetails details() {
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || auth.getDetails() == null) return null;
+            return (AuthDetails) auth.getDetails();
         }
 
-        return details.tenantId();
-    }
+        public static UUID tenantId() {
+            var d = details();
+            if (d == null || d.tenantId() == null) throw new RuntimeException("Unauthorized");
+            return d.tenantId();
+        }
 
-    public static String role() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if ( auth == null || !auth.isAuthenticated()) {
-            throw new UnauthorizedException("Not authenticated");
+        public static String role() {
+            var d = details();
+            if (d == null || d.role() == null) throw new RuntimeException("Unauthorized");
+            return d.role();
         }
-        if (!(auth.getDetails() instanceof AuthDetails details)) {
-            throw new UnauthorizedException("Missing auth details");
+
+        public static boolean isDevice() {
+            return "DEVICE".equalsIgnoreCase(role());
         }
-        return details.role();
-    }
+
+        public static UUID deviceId() {
+            var d = details();
+            if (d == null || d.deviceId() == null) throw new RuntimeException("DeviceId ausente no token");
+            return d.deviceId();
+        }
+
+        public static UUID screenId() {
+            var d = details();
+            if (d == null || d.screenId() == null) throw new RuntimeException("ScreenId ausente no token");
+            return d.screenId();
+        }
 }

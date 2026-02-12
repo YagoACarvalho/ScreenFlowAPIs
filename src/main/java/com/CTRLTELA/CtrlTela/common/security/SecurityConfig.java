@@ -31,13 +31,23 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/device/activate").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/device/refresh").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .anyRequest().authenticated()
+
+                        // auth
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+
+                        // device public
+                        .requestMatchers(HttpMethod.POST, "/api/device/activate").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/device/refresh").permitAll()
+
+                        // device private
+                        .requestMatchers("/api/device/**").hasRole("DEVICE")
+
+                        // tenant/admin endpoints
+                        .requestMatchers("/api/screens/**").hasRole("ADMIN")
+                        .requestMatchers("/api/activation-codes/**").hasRole("ADMIN")
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -4,6 +4,8 @@ import java.util.UUID;
 
 public record AuthDetails(
         UUID tenantId,
-        String role
+        String role,
+        UUID deviceId,
+        UUID screenId
 ) {
 }

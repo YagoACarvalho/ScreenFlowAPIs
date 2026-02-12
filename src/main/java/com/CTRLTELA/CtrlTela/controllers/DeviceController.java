@@ -1,5 +1,6 @@
 package com.CTRLTELA.CtrlTela.controllers;
 
+import com.CTRLTELA.CtrlTela.common.login.AuthContext;
 import com.CTRLTELA.CtrlTela.dtos.DeviceActivation.DeviceActivateResponse;
 import com.CTRLTELA.CtrlTela.dtos.DeviceActivation.DeviceActivationRequest;
 import com.CTRLTELA.CtrlTela.dtos.DeviceActivation.DeviceRefreshRequest;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/device")
@@ -33,7 +36,18 @@ public class DeviceController {
 
     @PostMapping("/refresh")
     public ResponseEntity<DeviceRefreshResponse> refresh(@RequestBody @Valid DeviceRefreshRequest req) {
-        return ResponseEntity.ok(refreshService.refresh(req));
+        var resp = refreshService.refresh(req);
+        return ResponseEntity.ok(resp);
     }
+
+    /* @PostMapping("/heartbeat")
+    public ResponseEntity<Void> heartbeat() {
+        UUID tenantId = AuthContext.tenantId();
+        UUID deviceId = AuthContext.deviceId();
+        UUID screenId = AuthContext.screenId();
+
+        service.heartbeat(tenantId, deviceId, screenId);
+        return ResponseEntity.noContent().build();
+    } */
 
 }

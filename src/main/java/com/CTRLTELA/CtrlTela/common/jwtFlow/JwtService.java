@@ -52,12 +52,33 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
 
-        String email = claims.getSubject();
+        String subject = claims.getSubject(); // email OU device:<uuid>
         String tenantIdStr = claims.get("tenantId", String.class);
         String role = claims.get("role", String.class);
 
-        return new JwtPrincipal(email, UUID.fromString(tenantIdStr), role);
+        UUID tenantId = UUID.fromString(tenantIdStr);
+
+        UUID deviceId = null;
+        UUID screenId = null;
+
+        if ("DEVICE".equalsIgnoreCase(role)) {
+            String deviceIdStr = claims.get("deviceId", String.class);
+            String screenIdStr = claims.get("screenId", String.class);
+
+            if (deviceIdStr != null) deviceId = UUID.fromString(deviceIdStr);
+            if (screenIdStr != null) screenId = UUID.fromString(screenIdStr);
+        }
+
+        // Se quiser manter "email" por compatibilidade, pode colocar subject lá também
+        return new JwtPrincipal(
+                subject,     // email (para USER) ou "device:<uuid>" (para DEVICE)
+                tenantId,
+                role,
+                deviceId,
+                screenId
+        );
     }
+
 
     public String generateDeviceAcessToken(UUID deviceId, UUID tenantId, UUID screenId) {
         Instant now = Instant.now();
