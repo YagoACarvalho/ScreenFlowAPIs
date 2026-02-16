@@ -71,7 +71,8 @@ public class JwtService {
 
         // Se quiser manter "email" por compatibilidade, pode colocar subject lá também
         return new JwtPrincipal(
-                subject,     // email (para USER) ou "device:<uuid>" (para DEVICE)
+                subject, // email (para USER) ou "device:<uuid>" (para DEVICE)
+                subject,
                 tenantId,
                 role,
                 deviceId,

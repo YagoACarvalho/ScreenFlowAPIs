@@ -63,7 +63,6 @@ public class DeviceActivationService {
 
         // Refresh token
         String refreshTokenRaw = UUID.randomUUID() + "." + UUID.randomUUID();
-        device.setRefreshToken(refreshTokenRaw);
 
         device.setRefreshToken(TokenHash.sha256Base64(refreshTokenRaw));
 

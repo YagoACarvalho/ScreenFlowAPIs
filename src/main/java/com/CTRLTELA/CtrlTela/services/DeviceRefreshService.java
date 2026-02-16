@@ -29,7 +29,11 @@ public class DeviceRefreshService {
     @Transactional
     public DeviceRefreshResponse refresh(DeviceRefreshRequest req) {
 
-        Device device = deviceRepository.findByRefreshToken(req.refreshToken())
+        // Hash do refresh token recebido
+        String providedHash = TokenHash.sha256Base64(req.refreshToken());
+
+        // Busca pelo HASH (nunca pelo raw)
+        Device device = deviceRepository.findByRefreshToken(providedHash)
                 .orElseThrow(() -> new IllegalArgumentException("Refresh token inválido"));
 
         // Confere fingerprint (MVP)
@@ -37,30 +41,31 @@ public class DeviceRefreshService {
             throw new IllegalArgumentException("Fingerprint não confere");
         }
 
+        // Status
         if (device.getStatus() != DeviceStatus.ACTIVE) {
             throw new IllegalArgumentException("Device inativo");
         }
 
-        String provideHash = TokenHash.sha256Base64(req.refreshToken());
-        if (!provideHash.equals(device.getRefreshToken())) {
-            throw new UnauthorizedException("Refresh token inválido");
-        }
-
+        // Atualiza lastseen
         device.setLastSeenAt(LocalDateTime.now());
 
         UUID tenantId = device.getTenant().getId();
         UUID screenId = device.getScreen().getId();
         UUID deviceId = device.getId();
 
+        // Gera novo acess token curto
         String accessToken = jwtService.generateDeviceAcessToken(deviceId, tenantId, screenId);
 
+        // Rotacionado refresh token (gera novo raw e salva hash)
         String newRefreshRaw = UUID.randomUUID() + "." + UUID.randomUUID();
         device.setRefreshToken(TokenHash.sha256Base64(newRefreshRaw));
 
         deviceRepository.save(device);
 
+        //Resposta devolve access + novo refresh RAW (o cliente precisa guardar o raw)
         return new DeviceRefreshResponse(
                 accessToken,
+                newRefreshRaw,
                 device.getId(),
                 device.getScreen().getId(),
                 device.getTenant().getId()

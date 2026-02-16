@@ -57,7 +57,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         null,
                         authorities
                 );
-                authentication.setDetails(new AuthDetails(principal.tenantId(), principal.role()));
+                authentication.setDetails(
+                        new AuthDetails(
+                                principal.tenantId(),
+                                principal.role(),
+                                principal.deviceId(),
+                                principal.screenId()
+                        )
+                );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } else {
@@ -68,7 +75,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         null,
                         userDetails.getAuthorities()
                 );
-                authentication.setDetails(new AuthDetails(principal.tenantId(), principal.role()));
+                authentication.setDetails(
+                        new AuthDetails(
+                                principal.tenantId(),
+                                principal.role(),
+                                principal.deviceId(),
+                                principal.screenId()
+                        )
+                );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 

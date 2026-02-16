@@ -6,6 +6,7 @@ import com.CTRLTELA.CtrlTela.dtos.DeviceActivation.DeviceActivationRequest;
 import com.CTRLTELA.CtrlTela.dtos.DeviceActivation.DeviceRefreshRequest;
 import com.CTRLTELA.CtrlTela.dtos.DeviceActivation.DeviceRefreshResponse;
 import com.CTRLTELA.CtrlTela.services.DeviceActivationService;
+import com.CTRLTELA.CtrlTela.services.DeviceHeartbeatService;
 import com.CTRLTELA.CtrlTela.services.DeviceRefreshService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,12 @@ public class DeviceController {
 
     private final DeviceActivationService service;
     private final DeviceRefreshService refreshService;
+    private final DeviceHeartbeatService deviceHeartbeatService;
 
-    public DeviceController(DeviceActivationService service, DeviceRefreshService refreshService) {
+    public DeviceController(DeviceActivationService service, DeviceRefreshService refreshService, DeviceHeartbeatService deviceHeartbeatService) {
         this.service = service;
         this.refreshService = refreshService;
+        this.deviceHeartbeatService = deviceHeartbeatService;
     }
 
     @PostMapping("/activate")
@@ -40,14 +43,14 @@ public class DeviceController {
         return ResponseEntity.ok(resp);
     }
 
-    /* @PostMapping("/heartbeat")
+    @PostMapping("/heartbeat")
     public ResponseEntity<Void> heartbeat() {
         UUID tenantId = AuthContext.tenantId();
         UUID deviceId = AuthContext.deviceId();
         UUID screenId = AuthContext.screenId();
 
-        service.heartbeat(tenantId, deviceId, screenId);
+       deviceHeartbeatService.heartbeat(tenantId, deviceId, screenId);
         return ResponseEntity.noContent().build();
-    } */
+    }
 
 }
