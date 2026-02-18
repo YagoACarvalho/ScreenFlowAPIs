@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Null;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -30,16 +31,19 @@ public class DeviceHeartbeatService {
         Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new NotFoundException("Device não encontrado"));
 
-        if(!device.getTenant().getId().equals(tenantId)) {
+        if (!device.getTenant().getId().equals(tenantId)) {
             throw new UnauthorizedException("Device não pertence ao tenant");
         }
 
-        if(!device.getScreen().getId().equals(screenId)) {
+        if (!device.getScreen().getId().equals(screenId)) {
             throw new UnauthorizedException("Screen do device não confere");
         }
 
-        if(device.getStatus() != DeviceStatus.ACTIVE){
-
+        if (device.getStatus() != DeviceStatus.ACTIVE) {
+            throw new UnauthorizedException("Device revogado");
         }
+
+        device.markSeen(LocalDateTime.now());
+        deviceRepository.save(device);
     }
 }

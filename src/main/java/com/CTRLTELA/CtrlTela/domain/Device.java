@@ -40,8 +40,8 @@ public class Device {
     @JoinColumn(name = "screen_id", nullable = false)
     private Screen screen;
 
-    @Column(name = "refresh_token", nullable = false, length = 255)
-    private String refreshToken;
+    @Column(name = "refresh_token_hash", nullable = false, length = 255)
+    private String refreshTokenHash;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

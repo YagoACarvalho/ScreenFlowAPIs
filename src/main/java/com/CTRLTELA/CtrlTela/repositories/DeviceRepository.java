@@ -14,6 +14,10 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
 
     boolean existsByTenantIdAndFingerprint(UUID tenantId, String fingerprint);
 
-    Optional<Device> findByRefreshToken(String refreshTokenHash);
+    Optional<Device> findByIdAndTenantId(UUID deviceId, UUID tenantId);
+
+    Optional<Device> findByRefreshTokenHash(String refreshTokenHash);
+
+    Optional<Device> findByIdAndTenantIdAndScreenId(UUID id, UUID tenantId, UUID screenId);
 
 }

@@ -33,17 +33,17 @@ public class DeviceRefreshService {
         String providedHash = TokenHash.sha256Base64(req.refreshToken());
 
         // Busca pelo HASH (nunca pelo raw)
-        Device device = deviceRepository.findByRefreshToken(providedHash)
-                .orElseThrow(() -> new IllegalArgumentException("Refresh token inválido"));
+        Device device = deviceRepository.findByRefreshTokenHash(providedHash)
+                .orElseThrow(() -> new UnauthorizedException("Refresh token inválido"));
 
         // Confere fingerprint (MVP)
         if (!device.getFingerprint().equals(req.deviceFingerprint())) {
-            throw new IllegalArgumentException("Fingerprint não confere");
+            throw new UnauthorizedException("Fingerprint não confere");
         }
 
         // Status
         if (device.getStatus() != DeviceStatus.ACTIVE) {
-            throw new IllegalArgumentException("Device inativo");
+            throw new UnauthorizedException("Device revogado");
         }
 
         // Atualiza lastseen
@@ -58,7 +58,7 @@ public class DeviceRefreshService {
 
         // Rotacionado refresh token (gera novo raw e salva hash)
         String newRefreshRaw = UUID.randomUUID() + "." + UUID.randomUUID();
-        device.setRefreshToken(TokenHash.sha256Base64(newRefreshRaw));
+        device.setRefreshTokenHash(TokenHash.sha256Base64(newRefreshRaw));
 
         deviceRepository.save(device);
 
@@ -66,9 +66,9 @@ public class DeviceRefreshService {
         return new DeviceRefreshResponse(
                 accessToken,
                 newRefreshRaw,
-                device.getId(),
-                device.getScreen().getId(),
-                device.getTenant().getId()
+                deviceId,
+                screenId,
+                tenantId
         );
 
     }

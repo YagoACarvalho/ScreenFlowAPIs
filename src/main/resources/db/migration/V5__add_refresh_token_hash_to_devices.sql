@@ -1,0 +1,2 @@
+ALTER TABLE devices
+ADD COLUMN refresh_token_hash VARCHAR(255) NOT NULL DEFAULT '';

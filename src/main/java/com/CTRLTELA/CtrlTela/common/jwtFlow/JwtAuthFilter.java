@@ -34,58 +34,59 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = authHeader.substring("Bearer ".length());
 
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
-            var principal = jwtService.parseAndValidate(token);
+            JwtPrincipal principal = jwtService.parseAndValidate(token);
+
+            var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + principal.role().toUpperCase()));
 
             if ("DEVICE".equalsIgnoreCase(principal.role())) {
-                var authorities = List.of(new SimpleGrantedAuthority("ROLE_DEVICE"));
-
+                // DEVICE: subject é string, ex "device:<uuid>"
                 var authentication = new UsernamePasswordAuthenticationToken(
-                        principal.subject(), // ex: device:<uuid>
+                        principal.subject(),
                         null,
                         authorities
                 );
-                authentication.setDetails(
-                        new AuthDetails(
-                                principal.tenantId(),
-                                principal.role(),
-                                principal.deviceId(),
-                                principal.screenId()
-                        )
-                );
-                SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                authentication.setDetails(new AuthDetails(
+                        principal.tenantId(),
+                        principal.role(),
+                        principal.deviceId(),
+                        principal.screenId()
+                ));
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
-                var userDetails = userDetailsService.loadUserByUsername(principal.subject()); // aqui subject=email
+                // USER: subject = email
+                var userDetails = userDetailsService.loadUserByUsername(principal.subject());
 
                 var authentication = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
                 );
-                authentication.setDetails(
-                        new AuthDetails(
-                                principal.tenantId(),
-                                principal.role(),
-                                principal.deviceId(),
-                                principal.screenId()
-                        )
-                );
+
+                authentication.setDetails(new AuthDetails(
+                        principal.tenantId(),
+                        principal.role(),
+                        null,
+                        null
+                ));
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-
         } catch (Exception ex) {
             SecurityContextHolder.clearContext();
         }

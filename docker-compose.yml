@@ -13,4 +13,4 @@ services:
       - midia_pgdata:/var/lib/postgresql/data
 
 volumes:
-  midia_pgdata:
+  midia_pgdata :

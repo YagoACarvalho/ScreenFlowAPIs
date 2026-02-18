@@ -22,36 +22,27 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(b ->b.disable())
+                .httpBasic(b -> b.disable())
                 .formLogin(f -> f.disable())
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/devices/*/revoke").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/device/heartbeat").hasRole("DEVICE")
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // auth
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-
-                        // device public
-                        .requestMatchers(HttpMethod.POST, "/api/device/activate").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/device/activate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/device/refresh").permitAll()
-
-                        // device private
-                        .requestMatchers("/api/device/**").hasRole("DEVICE")
-
-                        // tenant/admin endpoints
-                        .requestMatchers("/api/screens/**").hasRole("ADMIN")
-                        .requestMatchers("/api/activation-codes/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
